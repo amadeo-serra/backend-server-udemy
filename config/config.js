@@ -1,0 +1,1 @@
+module.exports.SEED = '@esto-es-una#semilla-rebuscada';
