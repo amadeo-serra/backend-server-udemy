@@ -14,7 +14,9 @@ var app = express();
 // ====================================================
 
 exports.verificaToken = function(req, res, next) {
-    var token = req.query.token;
+    //var token = req.query.token;
+    var token = req.header('token');
+
 
     jwt.verify(token, SEED, (err, decoded) => {
 
