@@ -125,7 +125,7 @@ app.post('/', (req, res) => {
 // ====================================================
 // Eliminar usuarios por id
 // ====================================================
-app.delete('/:id', [autenticacion.verificaToken], (req, res) => {
+app.delete('/:id', [autenticacion.verificaToken, autenticacion.verificaADMIN_ROLE], (req, res) => {
 
     var id = req.params.id;
 
@@ -163,7 +163,7 @@ app.delete('/:id', [autenticacion.verificaToken], (req, res) => {
 // ====================================================
 // Actualizar usuarios
 // ====================================================
-app.put('/:id', [autenticacion.verificaToken], (req, res) => {
+app.put('/:id', [autenticacion.verificaToken, autenticacion.verificaADMIN_o_MismoUsuario], (req, res) => {
 
     var id = req.params.id;
     var body = req.body;

@@ -15,7 +15,7 @@ const client = new OAuth2Client(CLIENT_ID);
 
 
 // =======================================
-// Autenticacion Googel
+// Autenticacion Google
 // =======================================
 async function verify(token) {
     const ticket = await client.verifyIdToken({
@@ -25,6 +25,7 @@ async function verify(token) {
         //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
     });
     const payload = ticket.getPayload();
+
     // const userid = payload['sub'];
     // If request specified a G Suite domain:
     // const domain = payload['hd'];
@@ -90,6 +91,7 @@ app.post('/google', async(req, res) => {
                 id: usuarioBD.id,
                 token: token,
                 usuario: usuarioBD,
+                menu: obtenerMenu(usuarioBD.role)
             });
 
             return;
@@ -114,6 +116,7 @@ app.post('/google', async(req, res) => {
                     usuario: usuarioBD,
                     id: usuarioBD.id,
                     token: token,
+                    menu: obtenerMenu(usuarioBD.role)
                 });
 
                 return;
@@ -186,6 +189,7 @@ app.post('/', (req, res) => {
                     usuario: usuarioBD,
                     id: usuarioBD.id,
                     token: token,
+                    menu: obtenerMenu(usuarioBD.role)
                 });
 
             });
@@ -193,7 +197,39 @@ app.post('/', (req, res) => {
 });
 
 
+// =======================================
+// Autenticacion normal
+// =======================================
+function obtenerMenu(ROLE) {
+    var menu = [{
+            titulo: 'principal',
+            icono: 'mdi mdi-gauge',
+            submenu: [
+                { titulo: 'Dashboard', url: '/dashboard' },
+                { titulo: 'ProgessBar', url: '/progress' },
+                { titulo: 'Graficas', url: '/graficas1' },
+                { titulo: 'Promesas', url: '/promesas' },
+                { titulo: 'RxJs', url: '/rxjs' },
+            ]
+        },
 
+        {
+            titulo: 'Mantenimientos',
+            icono: 'mdi mdi-folder-lock-open',
+            submenu: [
+                // { titulo: 'Usuarios', url: '/usuarios' },
+                { titulo: 'Hospitales', url: '/hospitales' },
+                { titulo: 'Medicos', url: '/medicos' },
+            ]
+        }
+    ];
+
+    if (ROLE === 'ADMIN_ROLE') {
+        menu[1].submenu.unshift({ titulo: 'Usuarios', url: '/usuarios' });
+    }
+
+    return menu;
+}
 
 
 

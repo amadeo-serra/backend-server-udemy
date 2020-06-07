@@ -6,9 +6,6 @@ var SEED = require('../config/config').SEED;
 
 var app = express();
 
-
-
-
 // ====================================================
 // Verificar TOKEN
 // ====================================================
@@ -42,4 +39,50 @@ exports.verificaToken = function(req, res, next) {
         //     decoded: decoded
         // });
     });
+};
+
+// ====================================================
+// Verificar ADMIN
+// ====================================================
+
+exports.verificaADMIN_ROLE = function(req, res, next) {
+
+
+    var usuario = req.usuario;
+
+    if (usuario.role === 'ADMIN_ROLE') {
+        next();
+        return;
+    } else {
+        return res.status(401).json({
+            ok: false,
+            mensaje: 'Acceso no autorizado',
+            errors: {
+                message: 'No tienes permiso para la peticion realizada'
+            }
+        });
+    }
+};
+
+// ====================================================
+// Verificar ADMIN o mismo usuario
+// ====================================================
+
+exports.verificaADMIN_o_MismoUsuario = function(req, res, next) {
+
+
+    var usuario = req.usuario;
+
+    if (usuario.role === 'ADMIN_ROLE' || usuario._id === req.params.id) {
+        next();
+        return;
+    } else {
+        return res.status(401).json({
+            ok: false,
+            mensaje: 'Acceso no autorizado',
+            errors: {
+                message: 'No tienes permiso para la peticion realizada'
+            }
+        });
+    }
 };
