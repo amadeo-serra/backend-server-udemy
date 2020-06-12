@@ -13,6 +13,24 @@ var Usuario = require('../models/usuario');
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(CLIENT_ID);
 
+var mdAutenticacion = require("../middlewares/autenticacion");
+
+// =======================================
+// Autenticacion Google
+// =======================================
+app.post('/renuevatoken', mdAutenticacion.verificaToken, (req, res) => {
+
+    // TOKEN!!!
+    var token = jwt.sign({ usuario: req.usuario }, SEED, { expiresIn: 14400 }); // 4horas
+
+    res.status(200).json({
+        ok: true,
+        // usuario: req.usuario,
+        token: token,
+    });
+
+});
+
 
 // =======================================
 // Autenticacion Google
@@ -179,9 +197,9 @@ app.post('/', (req, res) => {
                 }
 
                 // TOKEN!!!
-                var token = jwt.sign({ usuario: usuarioBD }, SEED, { expiresIn: 14400 }); // 4horas
-
                 usuarioBD.password = ';-)';
+
+                var token = jwt.sign({ usuario: usuarioBD }, SEED, { expiresIn: 14400 }); // 4horas
 
                 res.status(200).json({
                     ok: true,
